@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} Sentiment Analysis</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Sentiment Analyzer ✨</h1>
+            <p class="subtitle">Analyze the sentiment of your text using AI</p>
+        </div>
+
+        <div class="form-container">
+            <form method="POST">
+                <textarea name="text1" placeholder="Enter your text here..." rows="6"></textarea>
+                <button type="submit" class="analyze-btn">Analyze Sentiment</button>
+            </form>
+        </div>
+
+        {% if final %}
+        <div class="results-container">
+            <div class="sentiment-card">
+                <h2>Analysis Results</h2>
+                <div class="text-preview">
+                    <p>"{{ text1 }}"</p>
+                </div>
+                
+                <div class="sentiment-score">
+                    <h3>Overall Sentiment</h3>
+                    <div class="score-display">
+                        {% if final >= 0.8 %}
+                            <span class="emoji">😊</span>
+                        {% elif final >= 0.6 %}
+                            <span class="emoji">🙂</span>
+                        {% elif final >= 0.4 %}
+                            <span class="emoji">😐</span>
+                        {% elif final >= 0.2 %}
+                            <span class="emoji">🙁</span>
+                        {% else %}
+                            <span class="emoji">😢</span>
+                        {% endif %}
+                        <span class="score">{{ (final * 100)|round|int }}% Positive</span>
+                    </div>
+                </div>
+
+                <div class="metrics-table">
+                    <h3>Detailed Metrics</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Score</th>
+                                <th>Indicator</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Positive</td>
+                                <td>{{ (text2 * 100)|round|int }}%</td>
+                                <td class="emoji-indicator">{% if text2 > 0.5 %}😊{% elif text2 > 0.2 %}🙂{% else %}😐{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Neutral</td>
+                                <td>{{ (text3 * 100)|round|int }}%</td>
+                                <td class="emoji-indicator">😐</td>
+                            </tr>
+                            <tr>
+                                <td>Negative</td>
+                                <td>{{ (text5 * 100)|round|int }}%</td>
+                                <td class="emoji-indicator">{% if text5 > 0.5 %}😢{% elif text5 > 0.2 %}🙁{% else %}😐{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Compound</td>
+                                <td>{{ (text4 * 100)|round|int }}%</td>
+                                <td class="emoji-indicator">
+                                    {% if text4 >= 0.8 %}😊
+                                    {% elif text4 >= 0.6 %}🙂
+                                    {% elif text4 >= 0.4 %}😐
+                                    {% elif text4 >= 0.2 %}🙁
+                                    {% else %}😢{% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
